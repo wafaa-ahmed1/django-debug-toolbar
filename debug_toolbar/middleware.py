@@ -109,7 +109,10 @@ class DebugToolbarMiddleware(object):
             response.set_cookie('djdt', 'hide', 864000)
 
         # Insert the toolbar in the response.
-        content = force_text(response.content, encoding=settings.DEFAULT_CHARSET)
+        content = force_text(
+            response.content,
+            encoding=getattr(response, 'charset', None) or settings.DEFAULT_CHARSET,
+        )
         insert_before = dt_settings.CONFIG['INSERT_BEFORE']
         try:                    # Python >= 2.7
             pattern = re.escape(insert_before)
